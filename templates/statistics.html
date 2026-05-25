@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="statistics-container animate-fade-in">
+    <!-- Live aggregated metrics header cards -->
+    <div class="metrics-grid">
+        <div class="metric-card glass-panel">
+            <div class="metric-info">
+                <span class="metric-label">Total Data Vol.</span>
+                <h3 class="metric-val" id="stats-total-bytes">0 B</h3>
+            </div>
+            <div class="metric-icon text-tcp"><i class="fa-solid fa-database"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel">
+            <div class="metric-info">
+                <span class="metric-label">Avg Packet Size</span>
+                <h3 class="metric-val" id="stats-avg-size">0 B</h3>
+            </div>
+            <div class="metric-icon text-udp"><i class="fa-solid fa-ruler-horizontal"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel">
+            <div class="metric-info">
+                <span class="metric-label">Live Packet Rate</span>
+                <h3 class="metric-val" id="stats-packet-rate">0 p/s</h3>
+            </div>
+            <div class="metric-icon text-icmp"><i class="fa-solid fa-wave-square"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel">
+            <div class="metric-info">
+                <span class="metric-label">Bandwidth Rate</span>
+                <h3 class="metric-val" id="stats-throughput">0.0 Kbps</h3>
+            </div>
+            <div class="metric-icon text-arp"><i class="fa-solid fa-gauge"></i></div>
+        </div>
+    </div>
+
+    <!-- Charts Workspace grid -->
+    <div class="grid-2 m-t-2">
+        <div class="glass-panel chart-container-card">
+            <h4>Live Protocol Distribution</h4>
+            <div class="chart-wrapper">
+                <canvas id="stats-protocol-chart"></canvas>
+            </div>
+        </div>
+        <div class="glass-panel chart-container-card">
+            <h4>Bandwidth Timeline (Bytes/sec)</h4>
+            <div class="chart-wrapper">
+                <canvas id="stats-timeline-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2 m-t-2">
+        <div class="glass-panel chart-container-card">
+            <h4>Top IP Source Addresses</h4>
+            <div class="chart-wrapper">
+                <canvas id="stats-sources-chart"></canvas>
+            </div>
+        </div>
+        <div class="glass-panel chart-container-card">
+            <h4>Top Network Destination Ports</h4>
+            <div class="chart-wrapper">
+                <canvas id="stats-ports-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Flows Conversation Matrix -->
+    <div class="stats-conversations-panel glass-panel m-t-2">
+        <div class="panel-header">
+            <h3><i class="fa-solid fa-arrows-spin"></i> Active Network Conversations (Top Conversations)</h3>
+            <span class="instructions-badge">Aggregated by IP Pairs</span>
+        </div>
+        <div class="table-scroll-wrapper">
+            <table class="packet-table" id="stats-conversations-table">
+                <thead>
+                    <tr>
+                        <th>Source IP</th>
+                        <th></th>
+                        <th>Destination IP</th>
+                        <th>Packets Transmitted</th>
+                        <th>Byte Volume</th>
+                        <th>Bandwidth Share</th>
+                    </tr>
+                </thead>
+                <tbody id="stats-conversations-body">
+                    <tr class="table-info-row">
+                        <td colspan="6">No live conversation flows captured yet. Activate the Live Monitor!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

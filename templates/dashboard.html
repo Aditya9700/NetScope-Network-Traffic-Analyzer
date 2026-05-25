@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container animate-fade-in">
+    <!-- Controls Bar -->
+    <div class="control-bar glass-panel">
+        <div class="control-group">
+            <label for="interface-select"><i class="fa-solid fa-network-wired"></i> Interface</label>
+            <select id="interface-select" class="form-select">
+                <option value="">Select an Interface...</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="filter-select"><i class="fa-solid fa-filter"></i> Protocol</label>
+            <select id="filter-select" class="form-select">
+                <option value="ALL">All Protocols</option>
+                <option value="TCP">TCP</option>
+                <option value="UDP">UDP</option>
+                <option value="ICMP">ICMP</option>
+                <option value="ARP">ARP</option>
+            </select>
+        </div>
+
+        <div class="control-group search-group">
+            <label for="search-input"><i class="fa-solid fa-magnifying-glass"></i> Search Query</label>
+            <input type="text" id="search-input" class="form-control" placeholder="Search IP, Port or Info...">
+        </div>
+
+        <div class="control-actions">
+            <button id="start-btn" class="btn btn-success">
+                <i class="fa-solid fa-play"></i> Start
+            </button>
+            <button id="stop-btn" class="btn btn-danger" disabled>
+                <i class="fa-solid fa-pause"></i> Stop
+            </button>
+            <button id="clear-btn" class="btn btn-secondary">
+                <i class="fa-solid fa-trash-can"></i> Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Performance Cards -->
+    <div class="metrics-grid m-t-1">
+        <div class="metric-card glass-panel border-tcp">
+            <div class="metric-info">
+                <span class="metric-label">Packets Captured</span>
+                <h3 class="metric-val" id="metric-total-packets">0</h3>
+            </div>
+            <div class="metric-icon text-tcp"><i class="fa-solid fa-cubes"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel border-udp">
+            <div class="metric-info">
+                <span class="metric-label">Avg Packet Size</span>
+                <h3 class="metric-val" id="metric-avg-size">0 B</h3>
+            </div>
+            <div class="metric-icon text-udp"><i class="fa-solid fa-expand"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel border-icmp">
+            <div class="metric-info">
+                <span class="metric-label">Packet Rate</span>
+                <h3 class="metric-val" id="metric-packet-rate">0 p/s</h3>
+            </div>
+            <div class="metric-icon text-icmp"><i class="fa-solid fa-bolt"></i></div>
+        </div>
+
+        <div class="metric-card glass-panel border-arp">
+            <div class="metric-info">
+                <span class="metric-label">Network Throughput</span>
+                <h3 class="metric-val" id="metric-throughput">0.0 Kbps</h3>
+            </div>
+            <div class="metric-icon text-arp"><i class="fa-solid fa-arrow-trend-up"></i></div>
+        </div>
+    </div>
+
+    <!-- Main Live Workspace (Split-Pane layout) -->
+    <div class="live-workspace m-t-1">
+        <!-- Live Table -->
+        <div class="live-table-container glass-panel">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-list"></i> Real-Time Stream</h3>
+                <span class="buffer-limit-label">Memory Buffer: Max 2000 Packets</span>
+            </div>
+            <div class="table-scroll-wrapper">
+                <table class="packet-table" id="live-packet-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Time</th>
+                            <th>Source</th>
+                            <th>Destination</th>
+                            <th>Protocol</th>
+                            <th>Length</th>
+                            <th>Summary Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packet-table-body">
+                        <tr class="table-info-row">
+                            <td colspan="7">Live sniffer idle. Select an interface and click start to sniff.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Details Inspector Pane -->
+        <div class="details-inspector glass-panel">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-microscope"></i> Packet Inspector</h3>
+                <span class="instructions-badge" id="inspector-instruction">Select a packet to inspect headers</span>
+            </div>
+            <div class="inspector-content" id="inspector-details-view" style="display: none;">
+                <!-- Layer Tabs -->
+                <div class="inspector-tabs" id="inspector-tabs-container">
+                    <!-- Dynamic layer buttons -->
+                </div>
+
+                <!-- Parsed Header Fields -->
+                <div class="header-fields-display scroll-dark" id="header-fields-display">
+                    <!-- Dynamic fields -->
+                </div>
+
+                <!-- Hex / ASCII Payload Dump -->
+                <div class="payload-dump-section" id="payload-dump-section" style="display: none;">
+                    <h4>Raw Data (Payload Dump)</h4>
+                    <div class="payload-pre-container">
+                        <div class="payload-hex" id="payload-hex-box"></div>
+                        <div class="payload-ascii" id="payload-ascii-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Visual telemetry row -->
+    <div class="grid-2 m-t-1">
+        <div class="glass-panel chart-container-card">
+            <h4>Live Protocol Distribution</h4>
+            <div class="chart-wrapper">
+                <canvas id="live-protocol-chart"></canvas>
+            </div>
+        </div>
+        <div class="glass-panel chart-container-card">
+            <h4>Live Packet Flow Timeline</h4>
+            <div class="chart-wrapper">
+                <canvas id="live-timeline-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# NetScope runtime data
+NetScope/uploads/*
+!NetScope/uploads/.gitkeep
+NetScope/logs/*
+!NetScope/logs/.gitkeep
+NetScope/charts/*
+!NetScope/charts/.gitkeep
+
+# Exclude generated root logs/uploads too (if run from workspace root)
+uploads/*
+!uploads/.gitkeep
+logs/*
+!logs/.gitkeep
+charts/*
+!charts/.gitkeep
+
+# Local OS files
+.DS_Store
+Thumbs.db

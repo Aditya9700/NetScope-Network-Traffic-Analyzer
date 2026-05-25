@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="home-container animate-fade-in">
+    <!-- Hero Banner Card -->
+    <div class="hero-card glass-panel">
+        <div class="hero-content">
+            <h2 class="hero-title">NetScope – Traffic Engineering & Security Platform</h2>
+            <p class="hero-subtitle">
+                A high-performance network analysis engine demonstrating deep packet inspection (DPI),
+                TCP/IP stack comprehension, asynchronous backend processing, and advanced visual telemetry.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-play"></i> Start Live Monitor
+                </a>
+                <a href="{{ url_for('upload') }}" class="btn btn-secondary">
+                    <i class="fa-solid fa-file-arrow-up"></i> Upload PCAP File
+                </a>
+            </div>
+        </div>
+        <div class="hero-badge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Production Ready</span>
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="stats-grid m-t-2">
+        <div class="stat-card glass-panel clickable" onclick="window.location.href='{{ url_for('dashboard') }}'">
+            <div class="stat-icon-wrapper protocol-tcp">
+                <i class="fa-solid fa-gauge-high"></i>
+            </div>
+            <div class="stat-details">
+                <h3 class="stat-label">Live Packet Capture</h3>
+                <p class="stat-desc">Sniff, parse, and analyze packets in real-time. Features multi-protocol filtering, search query matching, and live table listings.</p>
+            </div>
+            <div class="card-chevron">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <div class="stat-card glass-panel clickable" onclick="window.location.href='{{ url_for('upload') }}'">
+            <div class="stat-icon-wrapper protocol-udp">
+                <i class="fa-solid fa-file-invoice"></i>
+            </div>
+            <div class="stat-details">
+                <h3 class="stat-label">PCAP File Analyzer</h3>
+                <p class="stat-desc">Analyze offline `.pcap` and `.pcapng` files. Generates traffic timeline charts, protocol breakdowns, and network conversations instantly.</p>
+            </div>
+            <div class="card-chevron">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <div class="stat-card glass-panel clickable" onclick="window.location.href='{{ url_for('statistics') }}'">
+            <div class="stat-icon-wrapper protocol-icmp">
+                <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div class="stat-details">
+                <h3 class="stat-label">Traffic Statistics</h3>
+                <p class="stat-desc">Gain insights on top talkers, bandwidth metrics, packet rates, standard deviation of packet lengths, and conversation matrices.</p>
+            </div>
+            <div class="card-chevron">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start & System Specifications -->
+    <div class="grid-2 m-t-2">
+        <!-- Technical Specifications -->
+        <div class="glass-panel content-card">
+            <h3 class="section-title"><i class="fa-solid fa-microchip"></i> System Specifications</h3>
+            <ul class="spec-list">
+                <li>
+                    <span class="spec-name">Core Core Capture Engine</span>
+                    <span class="spec-val">Scapy / Raw Sockets</span>
+                </li>
+                <li>
+                    <span class="spec-name">Data Processing Layer</span>
+                    <span class="spec-val">Pandas / NumPy</span>
+                </li>
+                <li>
+                    <span class="spec-name">Web Server & API API</span>
+                    <span class="spec-val">Flask (Python) / REST</span>
+                </li>
+                <li>
+                    <span class="spec-name">Front-End Visualization</span>
+                    <span class="spec-val">Chart.js (v4.x) / Canvas</span>
+                </li>
+                <li>
+                    <span class="spec-name">Security Features</span>
+                    <span class="spec-val">Magic Byte Validation, File-limits</span>
+                </li>
+                <li>
+                    <span class="spec-name">Logging Mechanism</span>
+                    <span class="spec-val">Rotated CSV File Logs (5MB max)</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Quick Start Guide -->
+        <div class="glass-panel content-card">
+            <h3 class="section-title"><i class="fa-solid fa-circle-play"></i> Quick Start Guide</h3>
+            <ol class="step-list">
+                <li>
+                    <span class="step-num">1</span>
+                    <div class="step-content">
+                        <strong>Select Network Interface</strong>
+                        <p>Navigate to the <a href="{{ url_for('dashboard') }}">Live Monitor</a> page, choose your active network interface (Ethernet/Wi-Fi) from the configuration bar, and click start.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <div class="step-content">
+                        <strong>Generate Traffic</strong>
+                        <p>Open a web browser or terminal, ping external servers or browse sites to trigger TCP, UDP, ICMP, and ARP traffic for live parsing.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <div class="step-content">
+                        <strong>Inspect Packets</strong>
+                        <p>Click on any captured row in the live table to inspect Ethernet headers, IP frames, TCP handshakes, and hexadecimal payloads.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">4</span>
+                    <div class="step-content">
+                        <strong>Analyze PCAP</strong>
+                        <p>Upload files on the <a href="{{ url_for('upload') }}">PCAP Analyzer</a> page to parse captures created on external routers or Wireshark.</p>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %}

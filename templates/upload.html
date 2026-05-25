@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="upload-container animate-fade-in">
+    <!-- Drag and Drop Dropzone -->
+    <div class="upload-dropzone glass-panel" id="dropzone">
+        <input type="file" id="pcap-file-input" accept=".pcap,.pcapng" style="display: none;">
+        <div class="dropzone-content">
+            <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+            <h3>Drag and Drop PCAP / PCAPNG capture file</h3>
+            <p class="dropzone-text">Supports standard Wireshark captures (Max 16MB file size)</p>
+            <button class="btn btn-primary" onclick="document.getElementById('pcap-file-input').click()">
+                Select Capture File
+            </button>
+        </div>
+        
+        <!-- Upload Progress indicator -->
+        <div class="upload-progress-wrapper" id="upload-progress-wrapper" style="display: none;">
+            <div class="upload-progress-info">
+                <span id="uploading-filename">file.pcap</span>
+                <span id="upload-percent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="upload-bar-fill"></div>
+            </div>
+            <span class="processing-text" id="processing-text" style="display: none;">
+                <i class="fa-solid fa-spinner fa-spin"></i> Running Deep Packet Inspection & Statistics...
+            </span>
+        </div>
+    </div>
+
+    <!-- Error Alert banner -->
+    <div class="error-alert glass-panel" id="upload-error-alert" style="display: none;">
+        <i class="fa-solid fa-circle-exclamation text-tcp alert-icon"></i>
+        <div class="alert-content">
+            <strong id="error-title">Upload Failed</strong>
+            <p id="error-message">Error details go here</p>
+        </div>
+    </div>
+
+    <!-- Upload Analytics Area (Initially Hidden) -->
+    <div class="pcap-analytics-dashboard m-t-2" id="pcap-analytics-dashboard" style="display: none;">
+        
+        <!-- File Metadata summary -->
+        <div class="file-summary-card glass-panel">
+            <div class="meta-item">
+                <span class="meta-label">Analyzed Capture</span>
+                <h4 class="meta-val" id="meta-filename">capture.pcap</h4>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">File Volume</span>
+                <h4 class="meta-val" id="meta-size">0.00 MB</h4>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Total Packets Parsed</span>
+                <h4 class="meta-val" id="meta-packets">0</h4>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Avg Packet Size</span>
+                <h4 class="meta-val" id="meta-avg-size">0.0 B</h4>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Bandwidth Rate</span>
+                <h4 class="meta-val" id="meta-rate">0.00 Kbps</h4>
+            </div>
+        </div>
+
+        <!-- Length Stats Grid (NumPy Output) -->
+        <div class="metrics-grid m-t-1">
+            <div class="metric-card glass-panel">
+                <div class="metric-info">
+                    <span class="metric-label">Min Packet Size</span>
+                    <h3 class="metric-val" id="pcap-min-len">0 B</h3>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-info">
+                    <span class="metric-label">Max Packet Size</span>
+                    <h3 class="metric-val" id="pcap-max-len">0 B</h3>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-info">
+                    <span class="metric-label">Median Packet Size</span>
+                    <h3 class="metric-val" id="pcap-median-len">0 B</h3>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-info">
+                    <span class="metric-label">Standard Deviation</span>
+                    <h3 class="metric-val" id="pcap-std-len">0.00</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid-2 m-t-1">
+            <div class="glass-panel chart-container-card">
+                <h4>Protocol Distribution</h4>
+                <div class="chart-wrapper">
+                    <canvas id="pcap-protocol-chart"></canvas>
+                </div>
+            </div>
+            <div class="glass-panel chart-container-card">
+                <h4>Throughput Timeline</h4>
+                <div class="chart-wrapper">
+                    <canvas id="pcap-timeline-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2 m-t-1">
+            <div class="glass-panel chart-container-card">
+                <h4>Top Source IP Addresses</h4>
+                <div class="chart-wrapper">
+                    <canvas id="pcap-sources-chart"></canvas>
+                </div>
+            </div>
+            <div class="glass-panel chart-container-card">
+                <h4>Top Destination Ports</h4>
+                <div class="chart-wrapper">
+                    <canvas id="pcap-ports-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split pane packet details & inspect panel (identical to Live but local) -->
+        <div class="live-workspace m-t-1">
+            <div class="live-table-container glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-list"></i> Parsed Packet List</h3>
+                    <span class="buffer-limit-label">Displaying first 1000 Packets</span>
+                </div>
+                <div class="table-scroll-wrapper">
+                    <table class="packet-table" id="pcap-packet-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Time Offset</th>
+                                <th>Source</th>
+                                <th>Destination</th>
+                                <th>Protocol</th>
+                                <th>Length</th>
+                                <th>Summary Info</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pcap-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Details Inspector Pane -->
+            <div class="details-inspector glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-microscope"></i> PCAP Packet Inspector</h3>
+                    <span class="instructions-badge" id="pcap-inspector-instruction">Select a packet to inspect headers</span>
+                </div>
+                <div class="inspector-content" id="pcap-inspector-details-view" style="display: none;">
+                    <div class="inspector-tabs" id="pcap-inspector-tabs-container"></div>
+                    <div class="header-fields-display scroll-dark" id="pcap-header-fields-display"></div>
+                    <div class="payload-dump-section" id="pcap-payload-dump-section" style="display: none;">
+                        <h4>Raw Data (Payload Dump)</h4>
+                        <div class="payload-pre-container">
+                            <div class="payload-hex" id="pcap-payload-hex-box"></div>
+                            <div class="payload-ascii" id="pcap-payload-ascii-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

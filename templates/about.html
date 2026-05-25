@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="about-container animate-fade-in">
+    <!-- Architecture Blueprint Section -->
+    <div class="glass-panel content-card">
+        <h3 class="section-title"><i class="fa-solid fa-sitemap"></i> NetScope System Architecture</h3>
+        <p class="section-intro">
+            NetScope is structured around a decoupled, modular design separating raw packet ingestion from telemetry visualization.
+            Below is the sequence flow of packet data from the NIC (Network Interface Card) to the web browser.
+        </p>
+
+        <!-- Dynamic visual sequence path via HTML/CSS -->
+        <div class="arch-flow-diagram">
+            <div class="flow-step">
+                <div class="flow-icon bg-tcp"><i class="fa-solid fa-ethernet"></i></div>
+                <h5>1. Packet Ingestion</h5>
+                <p>NIC captures raw Ethernet frames via Scapy raw socket bindings.</p>
+            </div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon bg-udp"><i class="fa-solid fa-gears"></i></div>
+                <h5>2. Header Parsing</h5>
+                <p>Parser extracts layer parameters and byte payloads.</p>
+            </div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon bg-icmp"><i class="fa-solid fa-database"></i></div>
+                <h5>3. Thread-Safe Buffer</h5>
+                <p>Packets append to concurrent deque and CSV logger with rotation.</p>
+            </div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon bg-arp"><i class="fa-solid fa-network-wired"></i></div>
+                <h5>4. REST API Gateway</h5>
+                <p>Flask routes serve stats and JSON streams with security verification.</p>
+            </div>
+            <div class="flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon accent-glow"><i class="fa-solid fa-chart-line"></i></div>
+                <h5>5. Canvas UI</h5>
+                <p>Chart.js translates data science arrays into telemetry feeds.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Concepts Demonstrated -->
+    <div class="glass-panel content-card m-t-2">
+        <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Network & System Fundamentals</h3>
+        <ul class="concept-list">
+            <li>
+                <strong>Layer 2/3/4 Decapsulation:</strong> Custom binary packet parsing mapping MAC addresses (Ethernet), Protocol Types (IPv4/IPv6), and Port numbers/Sequence keys (TCP/UDP/ICMP/ARP).
+            </li>
+            <li>
+                <strong>Multithreaded Race Prevention:</strong> Asynchronous thread creation running Scapy packet sniffers in the background while maintaining thread synchronization using `threading.Lock` across shared buffer variables.
+            </li>
+            <li>
+                <strong>High-Performance Data Science:</strong> Applying NumPy for packet distribution standard deviation and percentile calculations, and Pandas for time-series resampling.
+            </li>
+            <li>
+                <strong>System Log Integrity:</strong> Automatic CSV log rotations triggering backup procedures at 5MB limits to avoid disk leaks and maintain permanent trails.
+            </li>
+            <li>
+                <strong>OWASP Validation Controls:</strong> Magic byte validation on PCAP uploads preventing mime-type spoofing alongside secure-file limits.
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

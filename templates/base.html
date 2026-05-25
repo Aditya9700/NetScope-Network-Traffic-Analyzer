@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetScope – Network Traffic Analyzer</title>
+    <!-- Google Fonts: Outfit and Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-circle-nodes logo-icon"></i>
+                    <span>NetScope</span>
+                </div>
+                <div class="live-indicator-wrapper">
+                    <span class="live-dot" id="global-live-dot"></span>
+                    <span class="status-text" id="global-status-text">Offline</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('index') }}" class="nav-item {% if active_page == 'home' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Live Monitor</span>
+                </a>
+                <a href="{{ url_for('upload') }}" class="nav-item {% if active_page == 'upload' %}active{% endif %}">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <span>PCAP Analyzer</span>
+                </a>
+                <a href="{{ url_for('statistics') }}" class="nav-item {% if active_page == 'statistics' %}active{% endif %}">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                    <span>Traffic Stats</span>
+                </a>
+                <a href="{{ url_for('about') }}" class="nav-item {% if active_page == 'about' %}active{% endif %}">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Architecture & Profile</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="username">Guest Reviewer</span>
+                        <span class="role">Admin Engineer</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-area">
+            <header class="top-header">
+                <h1 class="page-title">
+                    {% if active_page == 'home' %}NetScope Platform Overview{% endif %}
+                    {% if active_page == 'dashboard' %}Real-Time Packet Monitor{% endif %}
+                    {% if active_page == 'upload' %}PCAP Upload Analyzer{% endif %}
+                    {% if active_page == 'statistics' %}Global Network Statistics{% endif %}
+                    {% if active_page == 'about' %}System Architecture & Profile{% endif %}
+                </h1>
+                
+                <div class="header-actions">
+                    <div class="network-badge">
+                        <i class="fa-solid fa-ethernet"></i>
+                        <span id="active-interface-label">No active interface</span>
+                    </div>
+                </div>
+            </header>
+            
+            <section class="content-body">
+                {% block content %}{% endblock %}
+            </section>
+            
+            <footer class="main-footer">
+                <span>&copy; 2026 NetScope Analyzer. Designed for software engineering evaluation.</span>
+                <div class="footer-meta">
+                    <span>Flask v2.2</span>
+                    <span>&bull;</span>
+                    <span>Scapy Engine</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+    
+    <!-- Dynamic page ID injection to bootstrap JS context -->
+    <script>
+        window.activePage = "{{ active_page }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
