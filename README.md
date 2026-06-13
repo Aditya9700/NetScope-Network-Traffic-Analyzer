@@ -1,4 +1,5 @@
 # NetScope – Network Traffic Analyzer
+Live Deployment: https://netscope-network-traffic-analyzer.onrender.com/
 
 NetScope is a production-ready, multithreaded network traffic analysis platform designed to capture, parse, and visualize live or offline packets. Built using Python, Scapy, Flask, Pandas, and Chart.js, the system decapsulates Layer 2, 3, and 4 protocols (Ethernet, ARP, IPv4/IPv6, TCP, UDP, ICMP), logs data streams to rotated CSV archives, and serves telemetry statistics over a modern glassmorphism web dashboard.
 
@@ -177,20 +178,5 @@ Access the dashboard at `http://127.0.0.1:5000`.
 | `/api/upload` | `POST` | PCAP upload analysis | Multipart form file field: `file` | `{ "success": true, "stats": {...}, "packets": [...] }` |
 
 ---
-
-## Render Cloud Deployment Instructions
-
-Live raw packet sniffing on Cloud Web Services like Render is restricted due to sandbox restrictions (non-root access, virtual network adapters). However, NetScope is optimized for cloud environments: **the PCAP Upload Analyzer runs fully on cloud staging platforms**, while live capture fallbacks are safely caught and surfaced to the UI.
-
-### Deployment Steps:
-
-1. Push your repository to **GitHub**.
-2. Log into [Render.com](https://render.com/) and create a new **Web Service**.
-3. Link your GitHub repository.
-4. Apply the following configurations (or Render will load them automatically from `render.yaml`):
-   - **Environment:** `Python`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn app:app`
-5. Click **Deploy**.
 
 
