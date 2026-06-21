@@ -7,6 +7,14 @@ This project is built to demonstrate software engineering best practices, networ
 
 ---
 
+# Screenshots
+## Home page 
+<img width="1913" height="968" alt="Screenshot 2026-06-16 001024" src="https://github.com/user-attachments/assets/99563311-77dd-40e5-a97f-b21474a3b666" />
+
+## Dashboard
+<img width="1897" height="968" alt="Screenshot 2026-06-16 001049" src="https://github.com/user-attachments/assets/f07b023f-46d1-4428-8c6d-8dc627f7c954" />
+
+
 ## Technical Architecture & Flow
 
 NetScope uses a decoupled, concurrent architecture to isolate low-level network interface bindings from REST interface consumers:
